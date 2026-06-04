@@ -63,7 +63,7 @@ OpenLoopSixstepCtrl_Handle_t OpenLoopSixstepCtrllM1 =
   .VoltageFactor              = 85U,                              /* Voltage factor for openloop speed control % of max DutyCycle. */
   .DutyCycleRef               = 20U,                              /* DutyCycleRef  duty cycle for PWM timer. */
   .DutyCycleRefFilter         = M1_OPENLOOP_DIGITAL_FILTER_SHIFT, /* Shif value of the digital filter. */
-  .Openloop                   = true,                             /* Openloop flag. */
+  .Openloop                   = false,                             /* Openloop flag. */
   .RevUp                      = 1,                                /* RevUp enabling flag. */
   .OnSensing                  = 0,                                /* OnSensing enabling flag. */
 };
