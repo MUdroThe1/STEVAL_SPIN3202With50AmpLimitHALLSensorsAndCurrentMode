@@ -247,14 +247,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
 
             /* USER CODE END MediumFrequencyTask M1 2 */
 
-            if (SDC_GetOpenLoopFlag(pOLS[M1]))
-            {
-              SDC_SetControlMode(pSDC[M1], MCM_DUTY_MODE);
-            }
-            else
-            {
-              MCI_ExecBufferedCommands(&Mci[M1]); /* Exec the speed ramp after changing of the speed sensor */
-            }
+            MCI_ExecBufferedCommands(&Mci[M1]); /* Exec the speed ramp after changing of the speed sensor */
             SixStepVars[M1].DutyCycleRef = SDC_CalcSpeedReference(pSDC[M1]);
             /* Update PWM at this Medium frequency rate after compution to allow a better start at low speed. */
             PWMC_SetPhaseVoltage(pwmcHandle[M1], PWM_Handle_M1.StartCntPh);
@@ -263,7 +256,6 @@ __weak void TSK_MediumFrequencyTaskM1(void)
             if(!IsSpeedReliable)
             {
               MCI_FaultProcessing(&Mci[M1], MC_SPEED_FDBK, 0);
-
             }
             else
             {
@@ -277,7 +269,6 @@ __weak void TSK_MediumFrequencyTaskM1(void)
         {
           if (TSK_StopPermanencyTimeHasElapsedM1())
           {
-            SDC_ClearDutyCycleMean(pOLS[M1]);
             /* USER CODE BEGIN MediumFrequencyTask M1 5 */
 
             /* USER CODE END MediumFrequencyTask M1 5 */

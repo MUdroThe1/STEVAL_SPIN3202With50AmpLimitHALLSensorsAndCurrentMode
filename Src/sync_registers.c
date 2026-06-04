@@ -28,7 +28,6 @@
 #include "mcp.h"
 #include "mcp_config.h"
 #include "mc_configuration_registers.h"
-#include "mc_tasks.h"
 
 uint8_t RI_SetRegisterGlobal(uint16_t regID, uint8_t typeID, uint8_t *data, uint16_t *size, int16_t dataAvailable)
 {
@@ -197,51 +196,6 @@ uint8_t RI_SetRegisterMotor1(uint16_t regID, uint8_t typeID, uint8_t *data, uint
           break;
         }
 
-        case MC_REG_OPENLOOP_DC_FILTER:
-        {
-          SDC_SetDutyCycleRefFilter(pOLS[0], *data);
-          break;
-        }
-
-        case MC_REG_OPENLOOP:
-        {
-          SDC_SetOpenLoopFlag(pOLS[0], *data);
-          break;
-        }
-
-        case MC_REG_OPENLOOP_DC:
-        {
-          SDC_SetDutyCycleRefOl(pOLS[0],*data);
-          break;
-        }
-
-        case MC_REG_OPENLOOP_REVUP:
-        {
-          SDC_SetRevUpFlag(pOLS[0], *data);
-          break;
-        }
-
-        case MC_REG_OPENLOOP_VOLTFACTOR:
-        {
-          SDC_SetVoltageFactor(pOLS[0], *data);
-          break;
-        }
-
-        case MC_REG_CONTROL_MODE:
-        {
-          uint8_t regdata8 = *data;
-
-          if ((uint8_t)MCM_SPEED_MODE == regdata8)
-          {
-            MCI_ExecSpeedRamp(pMCIN, MCI_GetMecSpeedRefUnit(pMCIN), 0);
-          }
-          else
-          {
-            /* Nothing to do */
-          }
-          break;
-        }
-
         default:
         {
           retVal = MCP_ERROR_UNKNOWN_REG;
@@ -257,11 +211,6 @@ uint8_t RI_SetRegisterMotor1(uint16_t regID, uint8_t typeID, uint8_t *data, uint
       uint16_t regdata16 = *(uint16_t *)data; //cstat !MISRAC2012-Rule-11.3
       switch (regID)
       {
-        case MC_REG_OPENLOOP_CURRFACTOR:
-        {
-          SDC_SetCurrentFactor(pOLS[0], regdata16);
-          break;
-        }
 
         case MC_REG_SPEED_KP:
         {
@@ -623,36 +572,6 @@ uint8_t RI_GetRegisterGlobal(uint16_t regID,uint8_t typeID,uint8_t * data,uint16
               break;
             }
 
-            case MC_REG_OPENLOOP:
-            {
-              *data = (uint8_t)SDC_GetOpenLoopFlag(pOLS[0]);
-              break;
-            }
-
-            case MC_REG_OPENLOOP_DC_FILTER:
-            {
-              *data = SDC_GetDutyCycleRefFilter(pOLS[0]);
-              break;
-            }
-
-            case MC_REG_OPENLOOP_DC:
-            {
-              *data = SDC_GetDutyCycleRefOl(pOLS[0]);
-              break;
-            }
-
-            case MC_REG_OPENLOOP_REVUP:
-            {
-              *data = SDC_GetRevUpFlag(pOLS[0]);
-              break;
-            }
-
-            case MC_REG_OPENLOOP_VOLTFACTOR:
-            {
-              *data = SDC_GetVoltageFactor(pOLS[0]);
-              break;
-            }
-
             default:
             {
               retVal = MCP_ERROR_UNKNOWN_REG;
@@ -677,11 +596,6 @@ uint8_t RI_GetRegisterGlobal(uint16_t regID,uint8_t typeID,uint8_t * data,uint16
         {
           switch (regID)
           {
-            case MC_REG_OPENLOOP_CURRFACTOR:
-            {
-              *regdata16 = SDC_GetCurrentFactor(pOLS[0]);
-              break;
-            }
 
             case MC_REG_SPEED_KP:
             {

@@ -40,8 +40,6 @@
 #define STEP_SHIFT                         (HALL_PHASE_SHIFT / 60)            /*!< Number of steps (60 degrees) into the Placement electrical angle. */
 #define PHASE_SHIFT_DEG                    (HALL_PHASE_SHIFT - (STEP_SHIFT * 60)) /*!< Number of degrees remaining after STEP_SHIFT. */
 
-#define M1_OPENLOOP_DIGITAL_FILTER_SHIFT  (uint8_t)2 /*!< size of the buffer to store commutation step time */
-
 /**************************    DRIVE SETTINGS SECTION   **********************/
 /* PWM generation and current reading */
 #define PWM_FREQUENCY                      15000

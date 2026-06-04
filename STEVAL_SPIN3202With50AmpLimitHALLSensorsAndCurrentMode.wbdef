@@ -32,7 +32,7 @@
         <define key="ENCODER_AVAILABLE" value="FALSE" />
         <define key="ENCODER_PPR" value="400" />
         <define key="EXT_CLOCK_FREQUENCY" value="INT_RC_OSC" />
-        <define key="FAST_DEMAG" value="FALSE" />
+        <define key="FAST_DEMAG" value="TRUE" />
         <define key="FLASH_SIZE" value="32" />
         <define key="H1_GPIO_PIN" value="GPIO_Pin_0" />
         <define key="H1_GPIO_PORT" value="GPIOA" />
@@ -65,7 +65,7 @@
         <define key="M1_CUR_MON_GAIN_FACTOR" value="6.6" />
         <define key="M1_CUR_READING" value="TRUE" />
         <define key="M1_CURRENT_MONITOR_READING" value="TRUE" />
-        <define key="M1_DBG_OPEN_LOOP_ENABLE" value="TRUE" />
+        <define key="M1_DBG_OPEN_LOOP_ENABLE" value="FALSE" />
         <define key="M1_DC_CURRENT_RS_MEAS" value="12" />
         <define key="M1_DEFAULT_TARGET_SPEED_RPM" value="1728" />
         <define key="M1_DP_TOPOLOGY" value="NONE" />
@@ -96,7 +96,6 @@
         <define key="M1_NOMINAL_CURRENT" value="12" />
         <define key="M1_OCP_TOPOLOGY" value="NONE" />
         <define key="M1_ON_OVER_VOLTAGE" value="TURN_OFF_PWM" />
-        <define key="M1_OPENLOOP_DIGITAL_FILTER_SHIFT" value="2" />
         <define key="M1_OV_VOLTAGE_PROT_ENABLING" value="ENABLE" />
         <define key="M1_OV_VOLTAGE_THRESHOLD_V" value="28.8" />
         <define key="M1_OVP_THRESHOLD_HIGH" value="28.8" />

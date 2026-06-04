@@ -53,21 +53,6 @@ PID_Handle_t PIDSpeedHandle_M1 =
   .hKdDivisorPOW2      = 0x0000U,
 };
 
-/**
-  * @brief  Openloop sixstep Controller parameters Motor 1.
-  */
-OpenLoopSixstepCtrl_Handle_t OpenLoopSixstepCtrllM1 =
-{
-  .DutyCycleRefMean           = 0U,                               /* Computed DutyCycleRef mean value. */
-  .CurrentFactor              = 10U,                              /* Curent factor for openloop speed control % of max DutyCycle. */
-  .VoltageFactor              = 85U,                              /* Voltage factor for openloop speed control % of max DutyCycle. */
-  .DutyCycleRef               = 20U,                              /* DutyCycleRef  duty cycle for PWM timer. */
-  .DutyCycleRefFilter         = M1_OPENLOOP_DIGITAL_FILTER_SHIFT, /* Shif value of the digital filter. */
-  .Openloop                   = false,                             /* Openloop flag. */
-  .RevUp                      = 1,                                /* RevUp enabling flag. */
-  .OnSensing                  = 0,                                /* OnSensing enabling flag. */
-};
-
 static SpeednDutyCtrl_Handle_t SpeednDutyCtrlM1 =
 {
   .Mode                       = DEFAULT_CONTROL_MODE,                         /* Changed during RevUp phase */
@@ -98,7 +83,7 @@ PWMC_Handle_t PWM_Handle_M1 =
   .driverProtectionFlag = false,
   .TimerCfg             = &SixPwm_TimerCfgM1,
   .QuasiSynchDecay      = false,
-  .LSModArray           = {0,0,0,0,0,0},
+  .LSModArray           = {1,0,1,0,1,0},
   .pParams_str          = &PWMC_ParamsM1,
   .LowSideOutputs       = (LowSideOutputsFunction_t)LOW_SIDE_SIGNALS_ENABLING,
   .TurnOnLowSidesAction = false,
@@ -137,7 +122,6 @@ HALL_6S_Handle_t HALL_M1 =
 SixStepVars_t SixStepVars[NBR_OF_MOTORS];
 SpeednDutyCtrl_Handle_t *pSDC[NBR_OF_MOTORS]    = {&SpeednDutyCtrlM1};
 NTC_Handle_t *pTemperatureSensor[NBR_OF_MOTORS] = {&TempSensor_M1};
-OpenLoopSixstepCtrl_Handle_t *pOLS[NBR_OF_MOTORS] = {&OpenLoopSixstepCtrllM1};
 
 MCI_Handle_t Mci[NBR_OF_MOTORS] =
 {

@@ -23,7 +23,6 @@
 #define MC_CONFIG_H
 
 #include "speed_duty_ctrl.h"
-#include "speed_duty_ctrl.h"
 #include "revup_ctrl_sixstep.h"
 #include "mc_config_common.h"
 #include "pwmc_sixstep.h"
@@ -33,7 +32,6 @@ extern PWMC_Handle_t PWM_Handle_M1;
 extern SixStepVars_t SixStepVars[NBR_OF_MOTORS];
 extern MCI_Handle_t* pMCI[NBR_OF_MOTORS];
 extern SpeednDutyCtrl_Handle_t *pSDC[NBR_OF_MOTORS];
-extern OpenLoopSixstepCtrl_Handle_t *pOLS[NBR_OF_MOTORS];
 extern MCI_Handle_t Mci[NBR_OF_MOTORS];
 extern PID_Handle_t PIDSpeedHandle_M1;
 extern HALL_6S_Handle_t HALL_M1;

@@ -121,7 +121,7 @@ typedef struct
 #define FLAG_MCP_OVER_UARTB        0U
 
 #define configurationFlag1_M1     (VBUS_SENSING_FLAG)
-#define configurationFlag2_M1     (DBG_OPEN_LOOP_FLAG|CURRENT_MONITOR_READING_FLAG|QUASI_SYNC_FLAG)
+#define configurationFlag2_M1     (CURRENT_MONITOR_READING_FLAG|QUASI_SYNC_FLAG)
 
 #define DRIVE_TYPE_M1              1
 

@@ -21,7 +21,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "speed_duty_ctrl.h"
-#include "mc_config.h"
 #include "mc_type.h"
 #include "drive_parameters.h"
 #include "mc_config.h"
@@ -30,8 +29,6 @@
 #define CHECK_BOUNDARY
 
 /* Local Functions -----------------------------------------------------------*/
-static uint16_t SDC_CalcOpenLoopDutyCycleCM(uint16_t PWMperiod, OpenLoopSixstepCtrl_Handle_t *pHandle);
-static uint16_t SDC_CalcOpenLoopDutyCycle(uint32_t HTargetCntPh, OpenLoopSixstepCtrl_Handle_t *pHandle);
 
 /** @addtogroup MCSDK
   * @{
@@ -102,14 +99,7 @@ __weak void SDC_Clear(SpeednDutyCtrl_Handle_t *pHandle)
     }
     else
     {
-      if ((SDC_GetOpenLoopFlag(pOLS[M1])) && (!SDC_GetRevUpFlag(pOLS[M1])))
-      {
-        pHandle->SpeedRefUnitExt = 0; /* For Open Loop case with no revup. */
-      }
-      else
-      {
-        /* nothing to do. */
-      }
+      /* Nothing to do. */
     }
     pHandle->DutyCycleRef = ((uint32_t)pHandle->DutyCycleRefDefault) * 65536U;
 #ifdef NULL_PTR_CHECK_SDC
@@ -266,16 +256,7 @@ __weak uint16_t SDC_CalcSpeedReference(SpeednDutyCtrl_Handle_t *pHandle)
 
     if (MCM_DUTY_MODE == pHandle->Mode)
     {
-      if (SDC_GetOpenLoopFlag(pOLS[M1]))
-      {
-      wCurrentReference = (int32_t) SDC_CalcOpenLoopDutyCycleCM(pwmcHandle[M1]->PWMperiod, pOLS[M1]);
-      pHandle->SpeedRefUnitExt = SPD_GetAvrgMecSpeedUnit(pHandle->SPD) * 65536;
-      pHandle->RampRemainingStep = 0U;
-      }
-      else
-      {
-        wCurrentReference = (int32_t)pHandle->DutyCycleRef;
-      }
+      wCurrentReference = (int32_t)pHandle->DutyCycleRef;
     }
     else
     {
@@ -330,20 +311,13 @@ __weak uint16_t SDC_CalcSpeedReference(SpeednDutyCtrl_Handle_t *pHandle)
     }
     else
     {
-      if (!SDC_GetOpenLoopFlag(pOLS[M1]))
-      {
-        pHandle->DutyCycleRef = (uint32_t)wCurrentReference;
+      pHandle->DutyCycleRef = (uint32_t)wCurrentReference;
 #ifdef NO_FULL_MISRA_C_COMPLIANCY_SPD_DUTY_CTRL
-        //cstat !MISRAC2012-Rule-1.3_n !ATH-shift-neg !MISRAC2012-Rule-10.1_R6
-        hDutyCycleReference = (uint16_t)((int16_t)(wCurrentReference >> 16));
+      //cstat !MISRAC2012-Rule-1.3_n !ATH-shift-neg !MISRAC2012-Rule-10.1_R6
+      hDutyCycleReference = (uint16_t)((int16_t)(wCurrentReference >> 16));
 #else
-        hDutyCycleReference = (uint16_t)((int16_t)(wCurrentReference / 65536));
+      hDutyCycleReference = (uint16_t)((int16_t)(wCurrentReference / 65536));
 #endif
-      }
-      else
-      {
-        hDutyCycleReference = (uint16_t)wCurrentReference;
-      }
     }
 #ifdef NULL_PTR_CHECK_SDC
   }
@@ -377,80 +351,6 @@ __weak bool SDC_StopSpeedRamp(SpeednDutyCtrl_Handle_t *pHandle)
   }
 #endif
   return (retVal);
-}
-
-/**
- * @brief  It is used to compute the new value of PWM current duty Cycle reference in current mode.
- *         It must be called at fixed time equal to hSTCFrequencyHz. It is called
- *         passing as parameter the PWM period, the open loop parameters used to set up the duty cycle.
- * @param  PWMperiod: PWM Period counter value of current refernce.
- * @param  pHandle: handler of the current instance of the SpeednTorqCtrl and component.
- * @retval int16_t:  PWM curretn dutycycle reference. This value represents actually the
- *         dutycycle expressed in digit for PWM counter.
- */
-uint16_t SDC_CalcOpenLoopDutyCycleCM(uint16_t PWMperiod, OpenLoopSixstepCtrl_Handle_t *pHandle)
-{
-  uint32_t hTargetCntPh = 0U;
-
-  if (MC_NULL == pHandle)
-  {
-    /* Nothing to do */
-  }
-  else
-  {
-    uint32_t highLimit = (pHandle->CurrentFactor * (uint32_t)PWMperiod) / 100U; /* Compute high limitation in PWM counter value */
-    hTargetCntPh = ((uint32_t)pHandle->DutyCycleRef * (uint32_t)highLimit) / 100U;  /* Convert from percentage to CM counter value. */
-    hTargetCntPh = SDC_CalcOpenLoopDutyCycle(hTargetCntPh, pHandle); /* Compute mean duty cyle value */
-  }
-  return ((uint16_t)hTargetCntPh);
-}
-/**
- * @brief  It is used to compute the mean value of duty Cycle reference in Current or Voltage mode.
- *         1 order digital filter of the following type: output += (input - output) >> 8.
- *         It is called passing as parameter the current HTargetCntPh and the open loop parameters.
- * @param  HTargetCntPh: PWM Period counter value of current refernce.
- * @param  pHandle: handler of the current instance of the SpeednTorqCtrl and component.
- * @retval uint16_t motor dutycycle reference. This value represents actually the
- *         mean dutycycle expressed in digit for PWM counter.
- */
-uint16_t SDC_CalcOpenLoopDutyCycle(uint32_t HTargetCntPh, OpenLoopSixstepCtrl_Handle_t *pHandle)
-{
-  uint32_t tempTargetCntPh = HTargetCntPh;
-
-  /* pHandle->DutyCycleRefMean += (hTargetCntPh - pHandle->DutyCycleRefMean) >> pHandle->DutyCycleRefFilter */
-  int32_t tempvalue = (int32_t)tempTargetCntPh - (int32_t)pHandle->DutyCycleRefMean;
-
-  if (tempvalue < 0)
-  {
-    tempTargetCntPh = ((uint32_t)(-tempvalue) >> pHandle->DutyCycleRefFilter);
-    tempTargetCntPh = pHandle->DutyCycleRefMean - tempTargetCntPh;
-  }
-  else
-  {
-    tempTargetCntPh = ((uint32_t)tempvalue >> pHandle->DutyCycleRefFilter);
-    tempTargetCntPh += pHandle->DutyCycleRefMean;
-  }
-
-  pHandle->DutyCycleRefMean = tempTargetCntPh;
-
-  return ((uint16_t)tempTargetCntPh);
-}
-
-/**
- * @brief  It is used to set the new value of duty cycle reference coming from the potentiometer (ADC).
- *         It must be called at fixed time equal to hSTCFrequencyHz. It is called
- *         passing as parameter the aw value comming from ADC IP..
- * @param  pHandle: handler of the current instance of the SpeednTorqCtrl and component.
- * @param  RawValue: ADC value coming from the potentiometer.
- * @retval none.
- */
-void SDC_Potentiometer_Run(OpenLoopSixstepCtrl_Handle_t *pHandle, uint16_t RawValue)
-{
-  uint32_t dutyCycleRef = (120U * (uint32_t)RawValue) / 65535U; /* Convert from 16bits to percentage value.
-                                                                 * 120 to compensate the ADC max value < 65535*/
-  dutyCycleRef = ((dutyCycleRef < 1U) ? 0U : dutyCycleRef); /* Lower value limitation */
-  dutyCycleRef = ((dutyCycleRef > 100U) ? 100U : dutyCycleRef); /* higher value limitation */
-  SDC_SetDutyCycleRefOl(pHandle, (uint8_t)dutyCycleRef); /* Set the dutyCycleRef */
 }
 
 /**
