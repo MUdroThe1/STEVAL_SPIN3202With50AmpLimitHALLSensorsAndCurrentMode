@@ -45,7 +45,7 @@
         amplification gain for shunts based sensing */
 #define AMPLIFICATION_GAIN                   6.6
 #define CURR_REF_DIVIDER                     3.2  /*!< Divider of the current limiter threshold  */
-#define OCP_INT_REF                          500  /*!< Internal over-current protecion threshold (mV) */
+#define OCP_INT_REF                          250  /*!< Internal over-current protecion threshold (mV) */
 
 /************ Temperature sensing section ***************/
 /* V[V]=V0+dV/dT[V/Celsius]*(T-T0)[Celsius]*/

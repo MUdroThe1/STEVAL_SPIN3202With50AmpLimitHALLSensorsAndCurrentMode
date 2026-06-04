@@ -53,15 +53,15 @@
 
 /* Speed control loop */
 #define SPEED_LOOP_FREQUENCY_HZ            (uint16_t)1000 /*!<Execution rate of speed regulation loop (Hz) */
-#define PID_SPEED_KP_DEFAULT              -2182/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
-#define PID_SPEED_KI_DEFAULT              -11/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
+#define PID_SPEED_KP_DEFAULT              -2320/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
+#define PID_SPEED_KI_DEFAULT              -1/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
 #define PID_SPEED_KD_DEFAULT               0/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
 
 /* Speed PID parameter dividers */
-#define SP_KPDIV                           16384
+#define SP_KPDIV                           8192
 #define SP_KIDIV                           16384
 #define SP_KDDIV                           16
-#define SP_KPDIV_LOG                       LOG2((16384))
+#define SP_KPDIV_LOG                       LOG2((8192))
 #define SP_KIDIV_LOG                       LOG2((16384))
 #define SP_KDDIV_LOG                       LOG2((16))
 

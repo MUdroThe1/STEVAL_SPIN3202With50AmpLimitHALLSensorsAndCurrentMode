@@ -43,7 +43,7 @@
 
 #define MOTOR_VOLTAGE_CONSTANT  3.7 /*!< Volts RMS ph-ph /kRPM */
 #define MOTOR_MAX_SPEED_RPM     4800 /*!< Maximum rated speed  */
-#define NOMINAL_CURRENT_A       12
+#define NOMINAL_CURRENT_A       7
 
 /***************** MOTOR SENSORS PARAMETERS  ******************************/
 /* Motor sensors parameters are always generated but really meaningful only
@@ -56,7 +56,7 @@
                                                  It can be either DEGREES_120 or
                                                  DEGREES_60 */
 
-#define HALL_PHASE_SHIFT        0 /*!< Define here in degrees
+#define HALL_PHASE_SHIFT        60 /*!< Define here in degrees
                                                  the electrical phase shift between
                                                  the low to high transition of
                                                  signal H1 and the maximum of

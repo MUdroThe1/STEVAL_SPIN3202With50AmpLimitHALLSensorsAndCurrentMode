@@ -44,7 +44,7 @@ static const ApplicationConfig_reg_t M1_ApplicationConfig_reg =
 {
   .maxMechanicalSpeed = 4800,
   .maxReadableCurrent = M1_MAX_READABLE_CURRENT,
-  .nominalCurrent     = 12,
+  .nominalCurrent     = 7,
   .nominalVoltage     = 24,
   .driveType          = DRIVE_TYPE_M1,
 };
@@ -57,7 +57,7 @@ static const MotorConfig_reg_t M1_MotorConfig_reg =
   .rs         = 0.9,
   .ls         = 0.001*1.000,
   .ld         = 0.001,
-  .maxCurrent = 12,
+  .maxCurrent = 7,
   .name = "216 3791 RS PRO 24V BLDC"
 };
 

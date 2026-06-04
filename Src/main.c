@@ -679,7 +679,7 @@ static void MX_GPIO_Init(void)
   LL_GPIO_SetOutputPin(OCTH_STBY2_GPIO_Port, OCTH_STBY2_Pin);
 
   /**/
-  LL_GPIO_SetOutputPin(OCTH_STBY1_GPIO_Port, OCTH_STBY1_Pin);
+  LL_GPIO_ResetOutputPin(OCTH_STBY1_GPIO_Port, OCTH_STBY1_Pin);
 
   /**/
   GPIO_InitStruct.Pin = OC_SEL_Pin;
